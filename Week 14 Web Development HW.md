@@ -12,7 +12,7 @@ Answer the following questions about the HTTP request and response process.
 
 1. What type of architecture does the HTTP request and response process occur in?
 
-    HTTP request anf response occurs in the Client-Server Architecture. 
+    HTTP request and response occurs in the Client-Server Architecture. 
 
 2. What parts make up an `HTTP request`?
 
@@ -25,7 +25,7 @@ Answer the following questions about the HTTP request and response process.
 
 3. What is the optional part of an HTTP request?
 
-    The request line also contain query parameters, which the client can use to send data to the server.
+    The request line also contain query parameters, which the client can use to send data to the server. This is an optional chunk of data. 
 
 4. What three parts make up an HTTP response?
 
@@ -56,6 +56,8 @@ Answer the following questions about the HTTP request and response process.
     The "Cookie" contains stored HTTP cokkies previously sent by the server with the Set-Cookie response header.
 
 9. In which part of an HTTP response would the browser receive the web code to generate and style a web page?
+
+    Th Response Body 
 
     
 
@@ -104,6 +106,8 @@ name: your name
 location: your current city
 
 
+
+
 #### Sessions and Cookies
 
 Recall that HTTP servers need ways to recognize clients from one another. These are implemented through sessions and cookies.
@@ -118,6 +122,8 @@ Answer the following questions about sessions and cookies.
     Set-Cookie: cart=Bob
     ```
 
+    This section: 'Content-type: text/html'
+
 16. Which request header sets a cookie in the client?
 
     ```HTTP
@@ -125,6 +131,8 @@ Answer the following questions about sessions and cookies.
     Host: www.example.org
     Cookie: cart=Bob
     ```
+
+    This section: 'Cookie: cart=Bob'
 
 #### Example HTTP Requests and Responses
 
@@ -147,11 +155,19 @@ username=Barbara&password=password
 
 17. What was the request method?
 
+    POST Request.
+
 18. Was the request encrypted or unencrypted?
+
+    The request was "Unencrypted". 
 
 19. Does the request have a user session associated to it?
 
+    Yes.
+
 20. What kind of data is being sent from this request body.
+
+    Request body contains login credentials.
 
 #### HTTP Response Example
 
@@ -174,13 +190,32 @@ X-XSS-Protection: 1; mode=block
 
 21. What was the response status code?
 
+    The response was accepted.
+
 22. Was the response encrypted or unencrypted?
+
+    The response was encrypted.
 
 23. Does this response have a user session associated to it?
 
+    No.
+
 24. What kind of content is likely to be in the [page content] response body?
 
+    Date: Contains a timestamp of when the response was generated.
+    Server: Apache - Indicates the server is running Apache
+    Set-Cookie: SessionID=5 Tells the client to create a cookie called SESSID with a value
+    of 5.
+        X-Content-Type: NoSniff header is used to protect against MIME
+
+    X-Frame-Options: DENY forbids a page from being displayed in a frame.
+    X-XSS-Protection: 1; mode=block Enables XSS filtering. Rather than sanitizing the page, the
+    browser will prevent rendering of the page if an attack is detected
+
+
 25. If your class covered security headers, what security request headers have been included?
+
+    The class has covered impotant information on Microservices and Monoliths.
 
 #### Monoliths and Microservices
 
@@ -188,7 +223,7 @@ Answer the following questions about monoliths and microservices:
 
 26. What are the individual components of microservices called?
 
-    Monoliths 
+    Clients - Identity Providers - API Gateway - Messaging - Formats - Databases - Static
 
 27. What is a service that writes to a database and communicates to other services?
 
@@ -196,15 +231,29 @@ Answer the following questions about monoliths and microservices:
 
 28. What type of underlying technology allows for `microservices` to become scalable and have redundancy?
 
+    Container Vulnerability Filtering
+
 #### Container Vulnerability Filtering
 
 Answer the following questions about vulnerability filtering `Trivy` scans with `jq`:
 
 29. Do `microservices` share the same kind of vulnerabilities as regular operating systems?
 
+    Microservices require lightweight environments to run on because:
+
+    Live services need to be deployed quickly.
+    Multiple copies of a service can be replicated as needed to meet demand.
+    Developers and maintainers can deploy their own copies of these services locally for their own testing purposes.
+    Full-sized VMs for each service requires more resources and costs more.
+
 30. Would an organization be more concerned with `Low` severity vulnerabilities as much as `Critical`?
 
+    The vulnerability would be same. Using Trivy is simple, but the most important part is filtering through the results for the most critical security risks.
+
+
 31. Would the bash tool `jq` be useful in finding certain kinds of vulnerabilities within a vulnerability report?
+
+    jq is like sed, but for JSON data. It is used to filter through JSON files and has the same text editing functionalities that are built into sed, awk, and grep. A security engineer will often have to filter through JSON logs in order to find the most relevant information for an organization.
 
 #### Deploying and Testing a Container Set
 
@@ -222,12 +271,18 @@ docker-compose.yml file format
 
 34. What is a tool used to actively detects intrusion behavior within containers?
 
-An intrusion detection system (IDS) is a device or software application that monitors a network or system for malicious activity.
+    Falco is an open-source CIDS that alerts security professionals of potential intrusion attempts, much like a normal network intrusion detection system.
+
 
 35. What high-value system file might an intruder view that would trigger a `sensitive file opening` alert?
 
+    When sensitive files, such as /etc/shadow, are read. At no point during a container deployment should the contents of /etc/shadow be read. This is a clear sign that an attacker is retrieving the hashed passwords of accounts within the system.
+
 36. What kind of intruder action might trigger an alert from a container IDS that says `shell configuration file has been modified`?
+
+    File creations at /root or /. At no point during a container's runtime should new files be created in the / or /root directories. Files created in these directories indicate compromise.
 
 ---
 
 © 2020 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
+
